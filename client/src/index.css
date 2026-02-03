@@ -19,3 +19,16 @@
   --color-heading: #4d4d4d;
   --color-text: #7f8c8d;
 }
+
+.activity-input select,
+input {
+  width: 17rem;
+  border: 1px solid #9f9f9f;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem 0;
+  border-radius: 0.25rem;
+}
+
+.activity-input label {
+  color: #4d4d4d;
+}

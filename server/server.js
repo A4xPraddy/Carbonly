@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./db.js";
 import authRoutes from "./routes/auth.routes.js";
+import typeRoutes from "./routes/type.routes.js";
+import activityRoutes from "./routes/activity.routes.js";
 import authMiddleware from "./middleware/auth.js";
 import cors from "cors";
 
@@ -12,6 +14,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/type", typeRoutes);
+app.use("/api/activity", activityRoutes);
 
 /* SECURE ROUTE */
 app.get("/api/secure", authMiddleware, (req, res) => {

@@ -5,7 +5,7 @@ const Navbar = ({ user = null }) => {
   return (
     <nav className="flex justify-between items-center px-12 py-8 bg-white text-black">
       <p className="text-xl">Carbonly</p>
-      {!user && (
+      {window.location.href.split("/").at(-1) !== "dashboard" && (
         <div className="flex gap-8">
           <Link
             to={"/signin"}
