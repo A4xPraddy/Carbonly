@@ -3,6 +3,7 @@ import Auth from "./components/Auth";
 import Dashboard from "./components/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Redirect from "./components/Redirect";
+import InsightsPage from "./components/InsightsPage";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/auth/signin" element={<Auth signin={true} />} />
         <Route path="/auth/signup" element={<Auth signin={false} />} />
         <Route path="/dashboard" element={<ProtectedRoute />}>
+          <Route path="/dashboard/insights" element={<InsightsPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="*" element={<Auth />} />
         </Route>

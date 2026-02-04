@@ -9,8 +9,11 @@ const Navbar = () => {
   };
   return (
     <nav className="flex justify-between items-center px-12 py-6 bg-white text-black">
-      <p className="text-xl">Carbonly</p>
-      {window.location.href.split("/").at(-1) !== "dashboard" ? (
+      <Link to={"/"} className="text-xl">
+        Carbonly
+      </Link>
+      {window.location.href.split("/").filter((part) => part === "dashboard")
+        .length === 0 ? (
         <div className="flex gap-8">
           <Link
             to={"/signin"}

@@ -6,6 +6,7 @@ import typeRoutes from "./routes/type.routes.js";
 import activityRoutes from "./routes/activity.routes.js";
 import authMiddleware from "./middleware/auth.js";
 import cors from "cors";
+import { callAPI } from "./llm/llm.controller.js";
 
 dotenv.config();
 
@@ -16,6 +17,15 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use("/api/type", typeRoutes);
 app.use("/api/activity", activityRoutes);
+
+app.get("/test", async (req, res) => {
+  let response = await callAPI();
+  const cleanedText = response.text
+    .replace(/^```json\s*/, "") // remove ```json at the start
+    .replace(/\s*```$/, "") // remove ``` at the end
+    .trim();
+  return res.json(JSON.parse(cleanedText));
+});
 
 /* SECURE ROUTE */
 app.get("/api/secure", authMiddleware, (req, res) => {
