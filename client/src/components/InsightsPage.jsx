@@ -2,9 +2,46 @@ import { useState, useEffect, useMemo } from "react";
 import BarGraph from "./charts/BarGraph";
 import Navbar from "./Navbar";
 import API from "../api/config";
+import Loader from "./Loader";
+
+let dummyInsight = {
+  suggestions: [
+    "Consider opting for locally sourced and seasonal produce to further reduce your food miles and associated emissions.",
+    "Explore alternative transportation methods like public transit, cycling, or carpooling for shorter distances to minimize car usage.",
+  ],
+  complements: [
+    "Your choice of vegetarian food significantly lowers your dietary carbon footprint compared to meat-heavy diets. Keep up the great work!",
+    "Your overall CO2 emissions for transport are commendable and well below typical averages.",
+  ],
+  comparison: {
+    food: {
+      public: 20,
+      user: 12,
+      note: "Excellent! Your food-related emissions are well below the public average, indicating sustainable dietary choices for the past 2 days.",
+    },
+    transport: {
+      public: 10,
+      user: 2.4,
+      note: "Your transport emissions are significantly lower than the public average over the past 2 days. This suggests efficient commuting or eco-friendly travel habits.",
+    },
+    total: {
+      public: 30,
+      user: 14.4,
+      note: "Overall, your CO2 emissions are considerably lower than the general public's average over the last 2 days. Keep up the great work!",
+    },
+  },
+  impact: [
+    "Your total CO2 emissions of 14.4 kg over the last two days are equivalent to driving a typical gasoline car for approximately 120 kilometers.",
+    "This amount of CO2 is comparable to what a mature tree absorbs in about 250 days.",
+    "Your emissions are roughly equivalent to the CO2 released from producing 175 standard 500ml plastic bottles.",
+    "It's also similar to the energy required to power an average 60W incandescent light bulb for approximately 480 hours.",
+    "Your two-day CO2 footprint is about the same as the emissions generated from producing half a kilogram of beef.",
+  ],
+};
 
 const InsightsPage = () => {
   const [insightsData, setInsightsData] = useState();
+  const [loading, setLoading] = useState(false);
 
   const chartData = useMemo(() => {
     return insightsData
@@ -18,7 +55,6 @@ const InsightsPage = () => {
         })
       : [];
   }, [insightsData]);
-  console.log(chartData);
 
   const totalPercentBelow = useMemo(() => {
     return insightsData
@@ -32,20 +68,28 @@ const InsightsPage = () => {
   }, [insightsData]);
 
   useEffect(() => {
+    setLoading(true);
     getInsights();
   }, []);
 
   const getInsights = async () => {
-    let { data } = await API.get("/insights");
-    console.log(data);
-    setInsightsData(data);
+    try {
+      let { data } = await API.get("/insights");
+      setInsightsData(data);
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
+    }
+
+    setLoading(false);
   };
 
   console.log(insightsData);
 
   return (
-    <div className="min-h-screen bg-gray-100 ">
+    <div className="min-h-screen flex flex-col bg-gray-100 ">
       <Navbar />
+      <Loader loading={loading} />
       {insightsData && (
         <div className="max-w-6xl mx-auto px-4 space-y-8 py-8">
           {/* Header */}
@@ -136,6 +180,12 @@ const InsightsPage = () => {
               to continue reducing your carbon footprint.
             </p>
           </div>
+        </div>
+      )}
+      {!insightsData && !loading && (
+        <div className="flex-1 flex items-center justify-center text-gray-600">
+          No insights available. Please log more activities to generate or try
+          again tomorrow for more insights.
         </div>
       )}
     </div>

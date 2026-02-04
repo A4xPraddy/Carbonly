@@ -79,12 +79,17 @@ export const getInsights = async (req, res) => {
   if (!userId) {
     return res.status(400).json({ message: "User does not exist" });
   }
-  let activites = await queryDB("month", userId);
-  console.log(activites);
-  let response = await callAPI(activites);
-  const cleanedText = response.text
-    .replace(/^```json\s*/, "")
-    .replace(/\s*```$/, "")
-    .trim();
-  return res.json(JSON.parse(cleanedText));
+
+  try {
+    let activites = await queryDB("month", userId);
+    let response = await callAPI(activites);
+    const cleanedText = response.text
+      .replace(/^```json\s*/, "")
+      .replace(/\s*```$/, "")
+      .trim();
+    return res.json(JSON.parse(cleanedText));
+  } catch (e) {
+    console.log(e);
+    return res.status(400).json({ message: "Something went wrong" });
+  }
 };
