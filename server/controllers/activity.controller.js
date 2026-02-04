@@ -1,4 +1,38 @@
 import Activity from "../models/Activity.js";
+import { callAPI } from "./llm.controller.js";
+
+const queryDB = async (duration, userId) => {
+  const now = new Date();
+  let startDate;
+
+  now.setUTCHours(0, 0, 0, 0);
+
+  switch (duration) {
+    case "day":
+      startDate = new Date(now);
+      break;
+
+    case "week":
+      startDate = new Date(now);
+      startDate.setUTCDate(startDate.getUTCDate() - 6);
+      break;
+
+    default:
+      startDate = new Date(now);
+      startDate.setUTCMonth(startDate.getUTCMonth() - 1);
+      break;
+  }
+
+  const activities = await Activity.find({
+    userId,
+    date: {
+      $gte: startDate,
+      $lte: now,
+    },
+  }).sort({ date: 1 });
+
+  return activities;
+};
 
 export const createActivity = async (req, res) => {
   let { type, subType, consumption, co2 } = req.body;
@@ -27,39 +61,7 @@ export const getActivitiesByDuration = async (req, res) => {
     const { duration = "day" } = req.query;
     const userId = req.userId;
 
-    const now = new Date();
-    let startDate;
-
-    now.setUTCHours(0, 0, 0, 0);
-
-    switch (duration) {
-      case "day":
-        startDate = new Date(now);
-        break;
-
-      case "week":
-        startDate = new Date(now);
-        startDate.setUTCDate(startDate.getUTCDate() - 6);
-        break;
-
-      case "month":
-        startDate = new Date(now);
-        startDate.setUTCMonth(startDate.getUTCMonth() - 1);
-        break;
-
-      default:
-        return res.status(400).json({
-          message: "Invalid duration. Use day, week, or month.",
-        });
-    }
-
-    const activities = await Activity.find({
-      userId,
-      date: {
-        $gte: startDate,
-        $lte: now,
-      },
-    }).sort({ date: 1 });
+    let activities = await queryDB(duration, userId);
 
     res.status(200).json({
       duration,
@@ -70,4 +72,19 @@ export const getActivitiesByDuration = async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
+};
+
+export const getInsights = async (req, res) => {
+  let userId = req.userId;
+  if (!userId) {
+    return res.status(400).json({ message: "User does not exist" });
+  }
+  let activites = await queryDB("month", userId);
+  console.log(activites);
+  let response = await callAPI(activites);
+  const cleanedText = response.text
+    .replace(/^```json\s*/, "")
+    .replace(/\s*```$/, "")
+    .trim();
+  return res.json(JSON.parse(cleanedText));
 };
