@@ -90,8 +90,8 @@ const LineChart = ({ data }) => {
   return (
     <div
       id="lineChartDiv"
-      className="charts bg-white rounded-lg"
-      style={{ width: "100%", height: "400px" }}
+      className="charts min-w-60 bg-white rounded-lg flex-1"
+      style={{ height: "400px" }}
     />
   );
 };

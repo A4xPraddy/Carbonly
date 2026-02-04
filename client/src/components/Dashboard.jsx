@@ -35,8 +35,6 @@ const Dashboard = () => {
     getActivites();
   }, [duration]);
 
-  console.log(activities);
-
   const getActivites = async () => {
     try {
       let response = await API.get(`/activity?duration=${duration}`);
@@ -56,8 +54,8 @@ const Dashboard = () => {
   return (
     <div className="bg-background/20 min-h-svh flex  flex-col">
       <Navbar />
-      <div className="p-12 flex-1 relative border-box">
-        <div className="flex justify-between items-center">
+      <div className="px-4 py-12 md:px-12 flex-1 relative border-box">
+        <div className="flex justify-between flex-wrap gap-2 items-center">
           <div className="flex gap-2">
             {durations.map((e, i) => {
               const [firstChar, ...restChars] = e;
@@ -85,7 +83,7 @@ const Dashboard = () => {
         </div>
 
         {activities.length > 0 ? (
-          <div className="flex my-6 gap-6">
+          <div className="flex flex-wrap my-6 gap-6">
             <PieChart data={categoryAggregatedData} />
             {duration !== "day" && <LineChart data={dateAggregatedData} />}
           </div>

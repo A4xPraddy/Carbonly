@@ -10,8 +10,8 @@ const Table = ({ data }) => {
   const cols = ["Type", "SubType", "CO2 Emission", "Consumption", "Date"];
   return (
     data.length > 0 && (
-      <div className="mt-12">
-        <table className="bg-white rounded-md max-w-[80%] w-full overflow-hidden">
+      <div className="mt-12 w-full max-w-200 min-w-60  relative overflow-scroll">
+        <table className="bg-white  rounded-md  w-full">
           <thead>
             <tr>
               {cols.map((e, i) => {
@@ -20,9 +20,9 @@ const Table = ({ data }) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((e) => {
+            {data.map((e, i) => {
               return (
-                <tr>
+                <tr key={i}>
                   <td>
                     <div
                       className={`${types[e.type]} px-4 py-1 border rounded-full text-center`}
