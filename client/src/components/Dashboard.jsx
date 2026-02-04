@@ -6,6 +6,7 @@ import ActivityInput from "./ActivityInput";
 import { getCategoryAggregate, getDateAggregate } from "../utils/Aggregate";
 import LineChart from "./charts/LineChart";
 import PieChart from "./charts/PieChart";
+import Table from "./Table";
 
 const Dashboard = () => {
   const [types, setTypes] = useState([]);
@@ -79,8 +80,8 @@ const Dashboard = () => {
         ) : (
           <div className="my-6">No Activites recorded within this duration</div>
         )}
-
-        <div className="grid gap-2 mt-12">
+        <Table data={activities} />
+        {/* <div className="grid gap-2 mt-12">
           {activities.map((activity) => (
             <div
               key={activity._id}
@@ -109,7 +110,7 @@ const Dashboard = () => {
               </div>
             </div>
           ))}
-        </div>
+        </div> */}
         <div className="fixed z-20 bottom-12 items-end right-12 flex flex-col gap-4">
           {showInputModal && <ActivityInput data={types} />}
 

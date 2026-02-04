@@ -46,3 +46,11 @@ input {
   left: 0;
   background-color: white;
 }
+
+td,
+th {
+  padding: 12px 24px;
+  border: 1px solid #e0e0e0;
+  text-transform: capitalize;
+  text-align: center;
+}
