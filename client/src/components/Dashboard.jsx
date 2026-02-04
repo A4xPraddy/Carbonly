@@ -1,8 +1,11 @@
-import React from "react";
+import { useMemo } from "react";
 import Navbar from "./Navbar";
 import { useEffect, useState } from "react";
 import API from "../api/config";
 import ActivityInput from "./ActivityInput";
+import { getCategoryAggregate, getDateAggregate } from "../utils/Aggregate";
+import LineChart from "./charts/LineChart";
+import PieChart from "./charts/PieChart";
 
 const Dashboard = () => {
   const [types, setTypes] = useState([]);
@@ -12,6 +15,14 @@ const Dashboard = () => {
   const [duration, setDuration] = useState("day");
 
   const [activities, setActivities] = useState([]);
+
+  const categoryAggregatedData = useMemo(() => {
+    return getCategoryAggregate(activities);
+  }, [activities]);
+
+  const dateAggregatedData = useMemo(() => {
+    return getDateAggregate(activities);
+  }, [activities]);
 
   useEffect(() => {
     getTypes();
@@ -40,14 +51,15 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="bg-background/20 h-svh flex  flex-col">
+    <div className="bg-background/20 min-h-svh flex  flex-col">
       <Navbar />
       <div className="p-12 flex-1 relative border-box">
         <div className="flex gap-2">
-          {durations.map((e) => {
+          {durations.map((e, i) => {
             const [firstChar, ...restChars] = e;
             return (
               <button
+                key={i}
                 onClick={() => {
                   setDuration(e);
                 }}
@@ -59,6 +71,15 @@ const Dashboard = () => {
             );
           })}
         </div>
+        {activities.length > 0 ? (
+          <div className="flex my-6 gap-6">
+            <PieChart data={categoryAggregatedData} />
+            {duration !== "day" && <LineChart data={dateAggregatedData} />}
+          </div>
+        ) : (
+          <div className="my-6">No Activites recorded within this duration</div>
+        )}
+
         <div className="grid gap-2 mt-12">
           {activities.map((activity) => (
             <div
@@ -89,14 +110,14 @@ const Dashboard = () => {
             </div>
           ))}
         </div>
-        <div className="absolute z-20 bottom-12 items-end right-12 flex flex-col gap-4">
+        <div className="fixed z-20 bottom-12 items-end right-12 flex flex-col gap-4">
           {showInputModal && <ActivityInput data={types} />}
 
           <button
             onClick={() => {
               setShowInputModal(!showInputModal);
             }}
-            className="w-6 h-6 p-6 text-xl cursor-pointer rounded-full bg-white shadow-md flex items-center justify-center"
+            className="w-6 h-6 p-6 text-xl cursor-pointer rounded-full bg-gray-400 text-white shadow-md flex items-center justify-center"
           >
             {showInputModal ? "X" : "+"}
           </button>

@@ -1,11 +1,16 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const Navbar = ({ user = null }) => {
+const Navbar = () => {
+  const navigate = useNavigate();
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/signin");
+  };
   return (
-    <nav className="flex justify-between items-center px-12 py-8 bg-white text-black">
+    <nav className="flex justify-between items-center px-12 py-6 bg-white text-black">
       <p className="text-xl">Carbonly</p>
-      {window.location.href.split("/").at(-1) !== "dashboard" && (
+      {window.location.href.split("/").at(-1) !== "dashboard" ? (
         <div className="flex gap-8">
           <Link
             to={"/signin"}
@@ -20,6 +25,13 @@ const Navbar = ({ user = null }) => {
             SignUp
           </Link>
         </div>
+      ) : (
+        <button
+          onClick={logout}
+          className="px-4 cursor-pointer py-2 border bg-primary text-black border-white rounded-md"
+        >
+          Log Out
+        </button>
       )}
     </nav>
   );

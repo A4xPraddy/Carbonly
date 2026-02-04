@@ -37,8 +37,8 @@ const Auth = ({ signin = true }) => {
   };
 
   return (
-    <div className="w-full h-svh flex items-center justify-center bg-primary/30">
-      <div className="w-fit max-w-md  items-center px-12 py-8 bg-white flex flex-col gap-4 rounded-lg">
+    <div className="w-full h-svh flex items-center justify-center  bg-background/20">
+      <div className="w-fit max-w-md shadow-sm items-center px-12 py-8 bg-white flex flex-col gap-4 rounded-lg">
         <p className="text-2xl text-black font-semibold">
           Carbonly Carbon Tracker
         </p>
@@ -76,7 +76,7 @@ const Auth = ({ signin = true }) => {
             placeholder="Enter your password"
             className="border border-gray-400 w-full rounded-md py-3 px-4"
           />
-          <button className="w-full cursor-pointer rounded-md text-center px-4 py-2 bg-primary text-white">
+          <button className="w-full max-w-[17rem] cursor-pointer rounded-md text-center px-4 py-2 bg-primary text-white">
             {signin ? "Sign In" : "Create Account"}
           </button>
         </form>

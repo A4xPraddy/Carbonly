@@ -32,3 +32,17 @@ input {
 .activity-input label {
   color: #4d4d4d;
 }
+
+.charts {
+  position: relative;
+}
+
+.charts::after {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 70px;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+}
