@@ -130,7 +130,7 @@ cd server
 node server.js
 ```
 
-### Backend
+### Frontend
 ```bash
 cd client
 npm install
